@@ -1,0 +1,8 @@
+[project]
+name = "wtforms_css"
+description = "WTForms but with base CSS classes"
+version = "0.1.0"
+authors=[{name="Neil McGuigan"}]
+dependencies=[
+    "wtforms"
+]
