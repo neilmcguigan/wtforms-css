@@ -11,7 +11,7 @@ class MyForm(Form):
 
 form = MyForm()
 
-print(form.name(), form.label())
+print(form.name(), form.name.label())
 ```
 
 Result:
@@ -21,6 +21,26 @@ Result:
 <label class="form-label" for="name">Name</label>
 ```
 
-UIKit coming soon!
+or
 
-![screenshot](screenshot.png?raw=true)
+```
+from wtforms_css.uikit import Form, StringField
+
+class MyForm(Form):
+    name = StringField("Name")
+
+form = MyForm()
+
+print(form.name(), form.name.label())
+```
+
+Result:
+
+```
+<input class="uk-input" id="name" name="name" type="text" value="">
+<label class="uk-form-label" for="name">Name</label>
+```
+
+![screenshot-bootstrap](screenshot-bootstrap.png?raw=true)
+
+![screenshot-uikit](screenshot-bootstrap.png?raw=true)

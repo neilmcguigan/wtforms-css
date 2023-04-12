@@ -2,6 +2,14 @@ import wtforms
 from markupsafe import Markup
 
 
+class ColorInput(wtforms.widgets.Input):
+    input_type = "color"
+
+
+class ColorField(wtforms.StringField):
+    widget = ColorInput()
+
+
 class Label(wtforms.Label):
     def __init__(self, field_id, text, css=None):
         self.css = css
@@ -16,28 +24,44 @@ class Label(wtforms.Label):
 class Form(wtforms.Form):
     class Meta:
         def bind_field(self, form, unbound_field, options):
-            result = super().bind_field(form, unbound_field, options)
-            if hasattr(result, "label_css") and result.label_css:
-                result.label = Label(
-                    result.label.field_id, result.label.text, result.label_css
+            field = super().bind_field(form, unbound_field, options)
+            if hasattr(field, "label_css") and field.label_css:
+                field.label = Label(
+                    field.label.field_id,
+                    field.label.text,
+                    field.label_css,
                 )
-            return result
+            return field
 
         def render_field(self, field, render_kw):
             if hasattr(field, "css") and field.css:
                 render_kw.setdefault("class_", field.css)
+                if field.raw_data is not None:
+                    if field.errors:
+                        render_kw["class_"] = f"{field.css} {field.invalid_css}"
+                    else:
+                        render_kw["class_"] = f"{field.css} {field.valid_css}"
             return super().render_field(field, render_kw)
 
 
-class RadioWidget:
+class TableWidget:
+    def __init__(self, table_css: str = ""):
+        self.table_css = table_css
+
     def __call__(self, field, **kwargs):
-        kwargs.setdefault("id", field.id)
-        html = []
-        html.append("<div>")
-        for subfield in field:
-            setattr(subfield, "css", field.css)
-            html.append(f'<div class="{field.container_css}">')
-            html.append(f"{subfield()} {subfield.label(class_=field.label_css)}")
-            html.append("</div>")
-        html.append("</div>")
+        if not len(field):
+            return ""
+        html = [f'<table class="{self.table_css}">\n']
+        html.append("<thead>\n<tr>")
+        for column in field[0]:
+            html.append(
+                f"<td>{column.label.text if column.type != 'SubmitField' else ''}</td>"
+            )
+        html.append("</tr>\n</thead>\n<tbody>\n")
+        for row in field:
+            html.append("<tr>")
+            for cell in row:
+                html.append(f"<td>{str(cell)}</td>")
+            html.append("</tr>\n")
+        html.append("</tbody>\n</table>\n")
         return Markup("".join(html))

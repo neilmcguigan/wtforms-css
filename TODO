@@ -2,9 +2,25 @@ change so can add css to existing, via render_kw and __call__()
     ex submit = SubmitField("Submit", render_kw={"class_":"btn-primary"})
     but this keeps "btn"
 
-check FormField
+make Label for submit, hidden, csrf return ""
+    to make forms more generic
 
-make nicer FieldList
+have option to output container, label, and field all at once
+
+figure out validation
+    add "is-valid" class if raw_data is not none, and has validators
+    add "is-invalid" class if raw_data is not none and has errors
+    show green if no validators?
+
+check:
+    FormField
+    FieldList(StringField)
+    FieldList(FormField(...))
+
+figure out InputGroups
+    use FormField?
 
 make container for BooleanField, like RadioField?
 
+other frameworks like bulma require custom wrapper for components
+    would want to change their widgets
