@@ -23,4 +23,4 @@ Result:
 
 UIKit coming soon!
 
-![screenshot](screenshot.png?raw=true "Screenshot")
+![screenshot](screenshot.png?raw=true)
