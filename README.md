@@ -43,4 +43,4 @@ Result:
 
 ![screenshot-bootstrap](screenshot-bootstrap.png?raw=true)
 
-![screenshot-uikit](screenshot-bootstrap.png?raw=true)
+![screenshot-uikit](screenshot-uikit.png?raw=true)
