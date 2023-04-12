@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from wtforms_css import (
+from wtforms_css.bootstrap import (
     BooleanField,
     ColorField,
     DateField,
