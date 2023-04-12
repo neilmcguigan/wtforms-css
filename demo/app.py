@@ -13,6 +13,7 @@ from wtforms_css.bootstrap import (
     FloatField,
     Form,
     HiddenField,
+    InlineRadioField,
     IntegerField,
     IntegerRangeField,
     MonthField,
@@ -53,6 +54,7 @@ class KitchenSink(Form):
     multiple_file = MultipleFileField("Multiple File")
     password = PasswordField("Password")
     radio = RadioField("Radio", choices=choices)
+    # radio2 = InlineRadioField("Inline Radio", choices=choices)
     search = SearchField("Search")
     select = SelectField("Select", choices=choices)
     select_multiple = SelectMultipleField("Select Multiple", choices=choices)

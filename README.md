@@ -4,7 +4,7 @@ WTForms but with base CSS classes
 Usage:
 
 ```
-from wtforms_css.bootstrap import Form, StringField, SubmitField
+from wtforms_css.bootstrap import Form, StringField
 
 class MyForm(Form):
     name = StringField("Name")
@@ -22,3 +22,5 @@ Result:
 ```
 
 UIKit coming soon!
+
+![screenshot](screenshot.png?raw=true "Screenshot")

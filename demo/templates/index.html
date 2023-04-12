@@ -22,7 +22,8 @@
             {{field()}}
             {% else %}
             <div class="mb-2">
-                {{ field.label() ~ " " ~ field()}}
+                {{ field.label()}}
+                {{field()}}
             </div>
             {% endif %}
             {% endfor %}

@@ -90,6 +90,10 @@ class RadioField(wtforms.RadioField):
     widget = wtforms_css.RadioWidget()
 
 
+class InlineRadioField(RadioField):
+    container_css = "form-check form-check-inline"
+
+
 class SearchField(DefaultMixin, wtforms.SearchField):
     ...
 
@@ -103,7 +107,7 @@ class SelectMultipleField(DefaultMixin, wtforms.SelectMultipleField):
 
 
 class SubmitField(wtforms.SubmitField):
-    css = "btn"  # make so can append class at instantiation time
+    css = "btn btn-primary"  # make so can append class at instantiation time
     label_css = ""
 
 
