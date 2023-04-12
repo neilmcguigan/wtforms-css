@@ -17,5 +17,6 @@ print(form.name(), form.label())
 Result:
 
 ```
-<input class="form-control" id="name" name="name" type="text" value=""> <label class="form-label" for="name">Name</label>
+<input class="form-control" id="name" name="name" type="text" value="">
+<label class="form-label" for="name">Name</label>
 ```
