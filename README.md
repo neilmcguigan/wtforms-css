@@ -41,6 +41,6 @@ Result:
 <label class="uk-form-label" for="name">Name</label>
 ```
 
-![screenshot-bootstrap](screenshot-bootstrap.png?raw=true)
+![screenshot-bootstrap](screenshot-bootstrap.png?raw=true "Bootstrap")
 
-![screenshot-uikit](screenshot-uikit.png?raw=true)
+![screenshot-uikit](screenshot-uikit.png?raw=true "UIKit")
