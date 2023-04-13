@@ -4,41 +4,40 @@ WTForms but with base CSS classes
 Usage:
 
 ```
-from wtforms_css.bootstrap import Form, StringField
+from wtforms.validators import InputRequired, Optional
+
+from wtforms_css.bootstrap import Form, RadioField, StringField, SubmitField
+# or from wtforms_css.uikit ...
 
 class MyForm(Form):
-    name = StringField("Name")
+    name = StringField("Name", validators=[Optional()])
+    radio = RadioField("Radio", choices=["a", "b"], validators=[InputRequired()])
+    submit = SubmitField("Submit", render_kw={"class": "btn-primary"})
 
 form = MyForm()
+form.validate()
 
 print(form.name(), form.name.label())
+print(form.radio())
+print(form.submit())
 ```
 
 Result:
 
 ```
-<input class="form-control" id="name" name="name" type="text" value="">
+<input class="form-control is-valid" id="name" name="name" type="text" value="">
 <label class="form-label" for="name">Name</label>
-```
 
-or
+<div class="form-check is-invalid">
+    <input class="form-check-input is-invalid" id="radio-0" name="radio" required type="radio" value="a">
+    <label class="form-check-label" for="radio-0">a</label>
+</div>
+<div class="form-check is-invalid">
+    <input class="form-check-input is-invalid" id="radio-1" name="radio" required type="radio" value="b">
+    <label class="form-check-label" for="radio-1">b</label>
+</div>
 
-```
-from wtforms_css.uikit import Form, StringField
-
-class MyForm(Form):
-    name = StringField("Name")
-
-form = MyForm()
-
-print(form.name(), form.name.label())
-```
-
-Result:
-
-```
-<input class="uk-input" id="name" name="name" type="text" value="">
-<label class="uk-form-label" for="name">Name</label>
+<input class="btn btn-primary" id="submit" name="submit" type="submit" value="Submit">
 ```
 
 ![screenshot-bootstrap](screenshot-bootstrap.png?raw=true "Bootstrap")
