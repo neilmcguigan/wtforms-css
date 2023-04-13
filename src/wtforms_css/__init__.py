@@ -16,8 +16,8 @@ class Label(wtforms.Label):
         super().__init__(field_id, text)
 
     def __call__(self, text=None, **kwargs):
-        if self.css:
-            kwargs.setdefault("class", self.css)
+        render_css = kwargs["class_"] if "class_" in kwargs else ""
+        kwargs["class_"] = " ".join([self.css, render_css]).strip()
         return super().__call__(text, **kwargs)
 
     @staticmethod
@@ -39,23 +39,20 @@ class Form(wtforms.Form):
             return field
 
         def render_field(self, field, render_kw):
-            if field.render_kw and field.css:
-                if "class" in field.render_kw:
-                    field.render_kw["class"] = f"{field.css} {field.render_kw['class']}"
-                else:
-                    field.render_kw["class"] = field.css
-            else:
-                field.render_kw = {"class": field.css}
-
-            if "class_" in render_kw and field.css:
-                render_kw["class_"] = f"{field.css} {render_kw['class_']}"
-
+            base_css = render_css = validation_css = ""
+            if field.css:
+                base_css = field.css
+            if field.render_kw and "class" in field.render_kw:
+                render_css = field.render_kw["class"]
+            if "class_" in render_kw:
+                render_css = render_kw["class_"]
             if self.validated and field.validators and field.type != "_Option":
-                extra = field.invalid_css if field.errors else field.valid_css
-                if "class_" in render_kw:
-                    render_kw["class_"] += f" {extra}"
-                else:
-                    render_kw["class_"] = f"{field.css} {extra}"
+                # _Options never have errors even if RadioField does...
+                validation_css = "is-invalid" if field.errors else "is-valid"
+
+            render_kw["class"] = " ".join(
+                [base_css, render_css, validation_css]
+            ).strip()
 
             return super().render_field(field, render_kw)
 
@@ -67,6 +64,7 @@ class TableWidget:
     def __call__(self, field, **kwargs):
         if not len(field):
             return ""
+
         html = [f'<table class="{self.table_css}">\n']
         html.append("<thead>\n<tr>")
         for column in field[0]:

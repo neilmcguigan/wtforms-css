@@ -44,7 +44,6 @@ class RadioWidget:
         self.container_css = container_css
 
     def __call__(self, field, **kwargs):
-        # kwargs.setdefault("id", field.id)
         extra = ""
         if "class" in kwargs:
             extra = kwargs["class"]

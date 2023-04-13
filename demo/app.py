@@ -90,7 +90,8 @@ class KitchenSink(Form):
 
 @app.get("/")
 def index():
-    return render_template("index.html", form=KitchenSink())
+    form = KitchenSink()
+    return render_template("index.html", form=form)
 
 
 @app.post("/")

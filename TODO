@@ -1,32 +1,8 @@
 test w csrf
 
-radios are pretty wonky...
-
-ur various widgets should set is-valid/is-invalid on container
-    so that displays errors below
-
-change so can add css to label.__call__()
-
-have option to output container, label, and field all at once - maybe
+test w flask-wtf
 
 check:
     FormField
     FieldList(StringField)
     FieldList(FormField(...))
-
-figure out InputGroups
-    meh, just do in template
-
-make container for BooleanField, like RadioField? meh
-
-other frameworks like bulma require custom wrapper for components
-    would want to change their widgets
-    
-x figure out validation
-    add "is-valid" class if raw_data is not none, and has validators
-    add "is-invalid" class if raw_data is not none and has errors
-    show green if no validators?
-
-x change so can add css to existing, via Field("name", render_kw={}) and __call__(class_=...)
-    ex submit = SubmitField("Submit", render_kw={"class_":"btn-primary"})
-    but this keeps "btn"    
