@@ -26,20 +26,37 @@ class Label(wtforms.Label):
 
 
 class Form(wtforms.Form):
+    def validate(self, extra_validators=None):
+        self.meta.validated = True
+        return super().validate(extra_validators)
+
     class Meta:
+        validated = False
+
         def bind_field(self, form, unbound_field, options):
             field = super().bind_field(form, unbound_field, options)
             field.label = Label.from_(field)
             return field
 
         def render_field(self, field, render_kw):
-            if hasattr(field, "css") and field.css:
-                render_kw.setdefault("class_", field.css)
-                if field.raw_data is not None:
-                    if field.errors:
-                        render_kw["class_"] = f"{field.css} {field.invalid_css}"
-                    else:
-                        render_kw["class_"] = f"{field.css} {field.valid_css}"
+            if field.render_kw and field.css:
+                if "class" in field.render_kw:
+                    field.render_kw["class"] = f"{field.css} {field.render_kw['class']}"
+                else:
+                    field.render_kw["class"] = field.css
+            else:
+                field.render_kw = {"class": field.css}
+
+            if "class_" in render_kw and field.css:
+                render_kw["class_"] = f"{field.css} {render_kw['class_']}"
+
+            if self.validated and field.validators and field.type != "_Option":
+                extra = field.invalid_css if field.errors else field.valid_css
+                if "class_" in render_kw:
+                    render_kw["class_"] += f" {extra}"
+                else:
+                    render_kw["class_"] = f"{field.css} {extra}"
+
             return super().render_field(field, render_kw)
 
 
@@ -64,3 +81,8 @@ class TableWidget:
             html.append("</tr>\n")
         html.append("</tbody>\n</table>\n")
         return Markup("".join(html))
+
+
+class DateTimeLocalField(wtforms.DateTimeLocalField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(format="%Y-%m-%dT%H:%M", *args, **kwargs)

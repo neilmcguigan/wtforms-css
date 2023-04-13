@@ -3,7 +3,6 @@ from wtforms import (
     BooleanField,
     DateField,
     DateTimeField,
-    DateTimeLocalField,
     DecimalField,
     DecimalRangeField,
     EmailField,
@@ -28,9 +27,11 @@ from wtforms import (
     TimeField,
     URLField,
 )
+from wtforms.fields.choices import SelectFieldBase
+from wtforms.widgets import html_params
 
 import wtforms_css
-from wtforms_css import ColorField, Form
+from wtforms_css import ColorField, DateTimeLocalField, Form
 
 
 class TableWidget(wtforms_css.TableWidget):
@@ -39,17 +40,21 @@ class TableWidget(wtforms_css.TableWidget):
 
 
 class RadioWidget:
+    def __init__(self, container_css: str = "form-check") -> None:
+        self.container_css = container_css
+
     def __call__(self, field, **kwargs):
-        kwargs.setdefault("id", field.id)
+        # kwargs.setdefault("id", field.id)
+        extra = ""
+        if "class" in kwargs:
+            extra = kwargs["class"]
         html = []
-        # html.append("<div>")
         for subfield in field:
-            html.append(f'<div class="{field.container_css}">')
+            html.append(f'<div class="{self.container_css} {extra}">')
             html.append(
-                f"{subfield(class_=field.css)} {subfield.label(class_=field.label_css)}"
+                f"{subfield(class_=f'form-check-input {extra}')}{subfield.label(class_='form-check-label')}"
             )
             html.append("</div>")
-        # html.append("</div>")
         return Markup("".join(html))
 
 
@@ -61,12 +66,12 @@ IntegerRangeField.css = "form-range"
 DecimalRangeField.css = "form-range"
 BooleanField.css = "form-check-input"
 BooleanField.label_css = "form-check-label"
-RadioField.css = "form-check-input"
-RadioField.label_css = "form-check-label"
-RadioField.container_css = "form-check"
+
+RadioField.css = ""
+SelectFieldBase._Option.css = ""
 RadioField.widget = RadioWidget()
+
 SelectField.css = "form-select"
-SubmitField.css = "btn btn-primary"
+SubmitField.css = "btn"
 ColorField.css = "form-control form-control-color"
 HiddenField.css = ""
-HiddenField.label_css = ""

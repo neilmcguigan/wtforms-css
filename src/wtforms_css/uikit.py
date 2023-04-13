@@ -3,7 +3,6 @@ from wtforms import (
     BooleanField,
     DateField,
     DateTimeField,
-    DateTimeLocalField,
     DecimalField,
     DecimalRangeField,
     EmailField,
@@ -20,6 +19,7 @@ from wtforms import (
     RadioField,
     SearchField,
     SelectField,
+    SelectFieldBase,
     SelectMultipleField,
     StringField,
     SubmitField,
@@ -30,7 +30,7 @@ from wtforms import (
 )
 
 import wtforms_css
-from wtforms_css import ColorField, Form
+from wtforms_css import ColorField, DateTimeLocalField, Form
 
 
 class TableWidget(wtforms_css.TableWidget):
@@ -39,13 +39,19 @@ class TableWidget(wtforms_css.TableWidget):
 
 
 class RadioWidget:
+    def __init__(self, container_css: str = "uk-form-controls") -> None:
+        self.container_css = container_css
+
     def __call__(self, field, **kwargs):
         kwargs.setdefault("id", field.id)
+        extra = ""
+        if "class" in kwargs:
+            extra = kwargs["class"]
         html = []
-        html.append(f'<div class="{field.container_css}">')
+        html.append(f'<div class="{self.container_css} {extra}">')
         for subfield in field:
             html.append(
-                f"<label>{subfield(class_=field.css)} {subfield.label.text}</label><br>"
+                f"<label>{subfield(class_=f'uk-radio {extra}')} {subfield.label.text}</label><br>"
             )
         html.append("</div>")
         return Markup("".join(html))
@@ -59,9 +65,11 @@ TextAreaField.css = "uk-textarea"
 IntegerRangeField.css = "uk-range"
 DecimalRangeField.css = "uk-range"
 BooleanField.css = "uk-checkbox"
-RadioField.css = "uk-radio"
-RadioField.container_css = "uk-form-controls"
+
+RadioField.css = ""
+SelectFieldBase._Option.css = ""
 RadioField.widget = RadioWidget()
+
 SelectField.css = "uk-select"
 SubmitField.css = "uk-button uk-button-default"
 FileField.css = ""

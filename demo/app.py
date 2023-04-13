@@ -1,11 +1,11 @@
+import wtforms
 from flask import Flask, render_template, request
-from wtforms import FormField
+from wtforms import FormField, validators
 
 from wtforms_css.bootstrap import (
     BooleanField,
     ColorField,
     DateField,
-    DateTimeField,
     DateTimeLocalField,
     DecimalField,
     DecimalRangeField,
@@ -36,13 +36,16 @@ from wtforms_css.bootstrap import (
 app = Flask(__name__)
 
 choices = ["a", "b", "c"]
+select_choices = ["", "a", "b", "c"]
+
+validators = [validators.InputRequired()]
 
 
 class MyFormField(Form):
-    name = StringField("Name")
-    age = IntegerField("Age")
-    registered = BooleanField("Registered")
-    another = SelectField("State", choices=choices)
+    name = StringField("Name", validators=validators)
+    age = IntegerField("Age", validators=validators)
+    registered = BooleanField("Registered", validators=validators)
+    another = SelectField("State", choices=select_choices, validators=validators)
 
 
 class MySubform(Form):
@@ -50,32 +53,37 @@ class MySubform(Form):
 
 
 class KitchenSink(Form):
-    boolean = BooleanField("Boolean")
-    color = ColorField("Color")
-    date = DateField("Date")
-    datetime = DateTimeField("Date Time")
-    datetimelocal = DateTimeLocalField("Date Time Local")
-    decimal = DecimalField("Decimal")
-    decimal_range = DecimalRangeField("Decimal Range")
-    email = EmailField("Email")
-    file = FileField("File")
-    floatfield = FloatField("Float")
+    boolean = BooleanField("Boolean", validators=validators)
+    color = ColorField("Color", validators=validators)
+    date = DateField("Date", validators=validators)
+    datetimelocal = DateTimeLocalField("Date Time Local", validators=validators)
+    decimal = DecimalField("Decimal", validators=validators)
+    decimal_range = DecimalRangeField("Decimal Range", validators=validators)
+    email = EmailField("Email", validators=validators)
+    file = FileField("File", validators=validators)
+    floatfield = FloatField("Float", validators=validators)
     hidden = HiddenField("Hidden")
-    integer = IntegerField("Integer")
-    integer_range = IntegerRangeField("Integer Range")
-    month = MonthField("Month")
-    multiple_file = MultipleFileField("Multiple File")
-    password = PasswordField("Password")
-    radio = RadioField("Radio", choices=choices)
-    search = SearchField("Search")
-    select = SelectField("Select", choices=choices)
-    select_multiple = SelectMultipleField("Select Multiple", choices=choices)
+    integer = IntegerField("Integer", validators=validators)
+    integer_range = IntegerRangeField("Integer Range", validators=validators)
+    month = MonthField("Month", validators=validators)
+    multiple_file = MultipleFileField("Multiple File", validators=validators)
+    password = PasswordField(
+        "Password",
+        validators=validators,
+        widget=wtforms.widgets.PasswordInput(hide_value=False),
+    )
+    radio = RadioField("Radio", choices=choices, validators=validators)
+    search = SearchField("Search", validators=validators)
+    select = SelectField("Select", choices=select_choices, validators=validators)
+    select_multiple = SelectMultipleField(
+        "Select Multiple", choices=choices, validators=validators
+    )
     submit = SubmitField("Submit", render_kw={"class": "btn-primary"})
-    string = StringField("String")
-    tel = TelField("Tel")
-    textarea = TextAreaField("Text Area")
-    time = TimeField("Time")
-    url = URLField("URL")
+    string = StringField("String", validators=validators)
+    tel = TelField("Tel", validators=validators)
+    textarea = TextAreaField("Text Area", validators=validators)
+    time = TimeField("Time", validators=validators)
+    url = URLField("URL", validators=validators)
     # subform = FormField(MySubform)
     tabular = FieldList(FormField(MyFormField), min_entries=3, widget=TableWidget())
 
@@ -89,4 +97,5 @@ def index():
 def index_post():
     form = KitchenSink(request.form)
     form.validate()
+
     return render_template("index.html", form=form)
