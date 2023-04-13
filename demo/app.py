@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from wtforms import FormField
 
-from wtforms_css.uikit import (
+from wtforms_css.bootstrap import (
     BooleanField,
     ColorField,
     DateField,

@@ -11,7 +11,7 @@ class ColorField(wtforms.StringField):
 
 
 class Label(wtforms.Label):
-    def __init__(self, field_id, text, css=None):
+    def __init__(self, field_id: str, text: str, css: str):
         self.css = css
         super().__init__(field_id, text)
 
@@ -20,17 +20,16 @@ class Label(wtforms.Label):
             kwargs.setdefault("class", self.css)
         return super().__call__(text, **kwargs)
 
+    @staticmethod
+    def from_(field: wtforms.Field):
+        return Label(field.label.field_id, field.label.text, field.label_css)
+
 
 class Form(wtforms.Form):
     class Meta:
         def bind_field(self, form, unbound_field, options):
             field = super().bind_field(form, unbound_field, options)
-            if hasattr(field, "label_css") and field.label_css:
-                field.label = Label(
-                    field.label.field_id,
-                    field.label.text,
-                    field.label_css,
-                )
+            field.label = Label.from_(field)
             return field
 
         def render_field(self, field, render_kw):
