@@ -41,20 +41,27 @@ class GridWidget(wtforms_css.GridWidget):
 
 class TableWidget(wtforms_css.TableWidget):
     def __init__(
-        self, with_table_tag=True, table_css="table table-sm table-borderless"
+        self, with_table_tag=True, table_css="table table-borderless table-sm"
     ):
         super().__init__(with_table_tag, table_css)
 
 
 class RadioWidget:
-    def __init__(self, container_css: str = "form-check") -> None:
-        self.container_css = container_css
+    """
+    can use extra_cls=form-check-inline|form-check-reverse,form-switch
+    """
+
+    def __init__(self, extra_css: str = "") -> None:
+        self.extra_css = extra_css
 
     def __call__(self, field, **kwargs):
-        valid_css = kwargs.get("class")
+        # kwargs should contain {"class":""|"is-valid"|"is-invalid"}
+        css = " ".join(
+            filter(None, ["form-check", self.extra_css, kwargs.get("class")])
+        )
         html = []
         for subfield in field:
-            html.append(f'<div class="{self.container_css} {valid_css}">')
+            html.append(f'<div class="{css}">')
             html.append(f"{subfield()}{subfield.label}")
             html.append("</div>")
         return Markup("".join(html))
