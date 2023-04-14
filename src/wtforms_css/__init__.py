@@ -16,8 +16,7 @@ class Label(wtforms.Label):
         super().__init__(field_id, text)
 
     def __call__(self, text=None, **kwargs):
-        render_css = kwargs["class_"] if "class_" in kwargs else ""
-        kwargs["class_"] = " ".join([self.css, render_css]).strip()
+        kwargs["class_"] = " ".join(filter(None, [self.css, kwargs.get("class_")]))
         return super().__call__(text, **kwargs)
 
     @staticmethod
@@ -26,33 +25,39 @@ class Label(wtforms.Label):
 
 
 class Form(wtforms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.validated = False
+        self.meta.form = self
+
     def validate(self, extra_validators=None):
-        self.meta.validated = True
+        self.validated = True
         return super().validate(extra_validators)
 
     class Meta:
-        validated = False
-
         def bind_field(self, form, unbound_field, options):
             field = super().bind_field(form, unbound_field, options)
             field.label = Label.from_(field)
             return field
 
         def render_field(self, field, render_kw):
-            base_css = render_css = validation_css = ""
-            if field.css:
-                base_css = field.css
-            if field.render_kw and "class" in field.render_kw:
-                render_css = field.render_kw["class"]
-            if "class_" in render_kw:
-                render_css = render_kw["class_"]
-            if self.validated and field.validators and field.type != "_Option":
-                # _Options never have errors even if RadioField does...
-                validation_css = "is-invalid" if field.errors else "is-valid"
+            if field.type == "_Option":
+                field.label = Label.from_(field)
+                field.parent = self.form[field.name]
+
+            validation_css = render_css = ""
+            if field.render_kw:
+                render_css = field.render_kw.get("class")
+            # override field.render_kw w __call__ kwargs:
+            render_css = render_kw.get("class_", render_css)
+
+            errors = field.errors if field.type != "_Option" else field.parent.errors
+            if self.form.validated and field.validators:
+                validation_css = field.invalid_css if errors else field.valid_css
 
             render_kw["class"] = " ".join(
-                [base_css, render_css, validation_css]
-            ).strip()
+                filter(None, [field.css, render_css, validation_css])
+            )
 
             return super().render_field(field, render_kw)
 

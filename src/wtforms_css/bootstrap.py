@@ -44,22 +44,18 @@ class RadioWidget:
         self.container_css = container_css
 
     def __call__(self, field, **kwargs):
-        extra = ""
-        if "class" in kwargs:
-            extra = kwargs["class"]
+        valid_css = kwargs.get("class")
         html = []
         for subfield in field:
-            html.append(f'<div class="{self.container_css} {extra}">')
-            html.append(
-                f"{subfield(class_=f'form-check-input {extra}')}{subfield.label(class_='form-check-label')}"
-            )
+            html.append(f'<div class="{self.container_css} {valid_css}">')
+            html.append(f"{subfield()}{subfield.label}")
             html.append("</div>")
         return Markup("".join(html))
 
 
 Field.valid_css = "is-valid"
 Field.invalid_css = "is-invalid"
-Field.css = "form-control"
+Field.css = "form-control form-control-sm"
 Field.label_css = "form-label"
 IntegerRangeField.css = "form-range"
 DecimalRangeField.css = "form-range"
@@ -67,10 +63,11 @@ BooleanField.css = "form-check-input"
 BooleanField.label_css = "form-check-label"
 
 RadioField.css = ""
-SelectFieldBase._Option.css = ""
+SelectFieldBase._Option.css = "form-check-input"
+SelectFieldBase._Option.label_css = "form-check-label"
 RadioField.widget = RadioWidget()
 
-SelectField.css = "form-select"
-SubmitField.css = "btn"
-ColorField.css = "form-control form-control-color"
+SelectField.css = "form-select form-select-sm"
+SubmitField.css = "btn btn-sm"
+ColorField.css = "form-control form-control-color form-control-sm"
 HiddenField.css = ""

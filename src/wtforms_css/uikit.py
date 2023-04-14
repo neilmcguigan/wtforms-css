@@ -43,16 +43,11 @@ class RadioWidget:
         self.container_css = container_css
 
     def __call__(self, field, **kwargs):
-        kwargs.setdefault("id", field.id)
-        extra = ""
-        if "class" in kwargs:
-            extra = kwargs["class"]
+        validation_css = kwargs.get("class")
         html = []
-        html.append(f'<div class="{self.container_css} {extra}">')
+        html.append(f'<div class="{self.container_css} {validation_css}">')
         for subfield in field:
-            html.append(
-                f"<label>{subfield(class_=f'uk-radio {extra}')} {subfield.label.text}</label><br>"
-            )
+            html.append(f"<label>{subfield()} {subfield.label.text}</label><br>")
         html.append("</div>")
         return Markup("".join(html))
 
@@ -68,6 +63,11 @@ BooleanField.css = "uk-checkbox"
 
 RadioField.css = ""
 SelectFieldBase._Option.css = ""
+RadioField.widget = RadioWidget()
+
+RadioField.css = ""
+SelectFieldBase._Option.css = "uk-radio"
+SelectFieldBase._Option.label_css = ""
 RadioField.widget = RadioWidget()
 
 SelectField.css = "uk-select"

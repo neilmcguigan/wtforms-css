@@ -97,6 +97,6 @@ def index():
 @app.post("/")
 def index_post():
     form = KitchenSink(request.form)
-    form.validate()
+    valid = form.validate()
 
     return render_template("index.html", form=form)
