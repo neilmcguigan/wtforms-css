@@ -2,7 +2,7 @@ import wtforms
 from flask import Flask, render_template, request
 from wtforms import FormField, validators
 
-from wtforms_css.bootstrap import (
+from wtforms_css.uikit import (
     BooleanField,
     ColorField,
     DateField,
@@ -49,10 +49,6 @@ class MyFormField(Form):
     another = SelectField("State", choices=select_choices, validators=validators)
 
 
-class MySubform(Form):
-    name = StringField("Name")
-
-
 class KitchenSink(Form):
     boolean = BooleanField("Boolean", validators=validators)
     color = ColorField("Color", validators=validators)
@@ -85,12 +81,11 @@ class KitchenSink(Form):
     textarea = TextAreaField("Text Area", validators=validators)
     time = TimeField("Time", validators=validators)
     url = URLField("URL", validators=validators)
-    # subform = FormField(MySubform)
     field_list = FieldList(FormField(MyFormField), min_entries=3, widget=GridWidget())
     form_field = FormField(MyFormField, widget=TableWidget())
 
 
-css = "bootstrap"
+css = "uikit"
 
 
 @app.get("/")
@@ -102,6 +97,6 @@ def index():
 @app.post("/")
 def index_post():
     form = KitchenSink(request.form)
-    valid = form.validate()
+    form.validate()
 
     return render_template("index.html", form=form, css=css)

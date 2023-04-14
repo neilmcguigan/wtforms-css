@@ -44,13 +44,15 @@ class TableWidget(wtforms_css.TableWidget):
 
 
 class RadioWidget:
-    def __init__(self, container_css: str = "uk-form-controls") -> None:
-        self.container_css = container_css
+    def __init__(self, extra_css: str = "") -> None:
+        self.extra_css = extra_css
 
     def __call__(self, field, **kwargs):
-        validation_css = kwargs.get("class")
+        css = " ".join(
+            filter(None, ["uk-form-controls", self.extra_css, kwargs.get("class")])
+        )
         html = []
-        html.append(f'<div class="{self.container_css} {validation_css}">')
+        html.append(f'<div class="{css}">')
         for subfield in field:
             html.append(f"<label>{subfield()} {subfield.label.text}</label><br>")
         html.append("</div>")

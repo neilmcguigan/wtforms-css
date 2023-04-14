@@ -19,6 +19,7 @@ from wtforms import (
     RadioField,
     SearchField,
     SelectField,
+    SelectFieldBase,
     SelectMultipleField,
     StringField,
     SubmitField,
@@ -27,8 +28,6 @@ from wtforms import (
     TimeField,
     URLField,
 )
-from wtforms.fields.choices import SelectFieldBase
-from wtforms.widgets import html_params
 
 import wtforms_css
 from wtforms_css import ColorField, DateTimeLocalField, Form

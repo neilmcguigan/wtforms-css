@@ -24,9 +24,10 @@
         <h1>WTForms CSS Demo</h1>
         <form method="post" novalidate>
             {% for field in form %}
+
             {% if field.type in ["BooleanField"] %}
-            <div class="form-check">
-                {{field() ~ " " ~ field.label()}}
+            <div class="form-check uk-form-control">
+                {{field()}} {{field.label()}}
             </div>
             {% if field.errors %}
             <div class="invalid-feedback uk-form-danger">
@@ -36,10 +37,10 @@
 
             {% elif field.type in ["SubmitField", "HiddenField"]%}
             {{field()}}
+
             {% else %}
             <div class="mb-2 uk-margin">
-                {{ field.label()}}
-                {{field()}}
+                {{field.label()}} {{field()}}
                 {% if field.errors %}
                 <div class="invalid-feedback uk-form-danger">
                     {{field.errors[0]}}
@@ -50,7 +51,6 @@
             {% endfor %}
         </form>
     </div>
-
 </body>
 
 </html>

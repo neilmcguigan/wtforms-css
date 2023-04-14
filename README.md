@@ -40,6 +40,8 @@ Result:
 <input class="btn btn-primary" id="submit" name="submit" type="submit" value="Submit">
 ```
 
+Bootstrap:
 ![screenshot-bootstrap](screenshot-bootstrap.png?raw=true "Bootstrap")
 
+UIKit:
 ![screenshot-uikit](screenshot-uikit.png?raw=true "UIKit")
