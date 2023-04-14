@@ -40,6 +40,24 @@ Result:
 <input class="btn btn-primary" id="submit" name="submit" type="submit" value="Submit">
 ```
 
+Want to integrate your own framework?
+
+```
+import wtforms_css
+
+from wtforms import Field, StringField
+
+Field.css = "class-applied-to-all-fields"
+Field.label_css = "class-applied-to-all-labels"
+Field.valid_css = "class-applied-to-fields-when-valid"
+Field.invalid_css = "class-applied-to-fields-when-invalid"
+StringField.css = "class-applied-to-StringField-and-subclasses"
+
+class MyForm(wtforms_css.Form):
+    foo = StringField("foo")
+
+```
+
 Bootstrap:
 ![screenshot-bootstrap](screenshot-bootstrap.png?raw=true "Bootstrap")
 
