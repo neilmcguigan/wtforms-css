@@ -2,7 +2,7 @@ import wtforms
 from flask import Flask, render_template, request
 from wtforms import FormField, validators
 
-from wtforms_css.uikit import (
+from wtforms_css.bootstrap import (
     BooleanField,
     ColorField,
     DateField,
@@ -85,7 +85,7 @@ class KitchenSink(Form):
     form_field = FormField(MyFormField, widget=TableWidget())
 
 
-css = "uikit"
+css = "bootstrap"
 
 
 @app.get("/")
