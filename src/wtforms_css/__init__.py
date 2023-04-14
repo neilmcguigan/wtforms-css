@@ -1,5 +1,6 @@
 import wtforms
 from markupsafe import Markup
+from wtforms.widgets import html_params
 
 
 class ColorInput(wtforms.widgets.Input):
@@ -62,7 +63,7 @@ class Form(wtforms.Form):
             return super().render_field(field, render_kw)
 
 
-class TableWidget:
+class GridWidget:
     def __init__(self, table_css: str = ""):
         self.table_css = table_css
 
@@ -84,6 +85,16 @@ class TableWidget:
             html.append("</tr>\n")
         html.append("</tbody>\n</table>\n")
         return Markup("".join(html))
+
+
+class TableWidget(wtforms.widgets.TableWidget):
+    def __init__(self, with_table_tag=True, table_css=""):
+        super().__init__(with_table_tag)
+        self.table_css = table_css
+
+    def __call__(self, field, **kwargs):
+        kwargs["class"] = " ".join(filter(None, [self.table_css, kwargs.get("class_")]))
+        return super().__call__(field, **kwargs)
 
 
 class DateTimeLocalField(wtforms.DateTimeLocalField):

@@ -34,9 +34,16 @@ import wtforms_css
 from wtforms_css import ColorField, DateTimeLocalField, Form
 
 
-class TableWidget(wtforms_css.TableWidget):
+class GridWidget(wtforms_css.GridWidget):
     def __init__(self):
         super().__init__("table table-borderless table-sm")
+
+
+class TableWidget(wtforms_css.TableWidget):
+    def __init__(
+        self, with_table_tag=True, table_css="table table-sm table-borderless"
+    ):
+        super().__init__(with_table_tag, table_css)
 
 
 class RadioWidget:

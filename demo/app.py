@@ -14,6 +14,7 @@ from wtforms_css.bootstrap import (
     FileField,
     FloatField,
     Form,
+    GridWidget,
     HiddenField,
     IntegerField,
     IntegerRangeField,
@@ -85,13 +86,17 @@ class KitchenSink(Form):
     time = TimeField("Time", validators=validators)
     url = URLField("URL", validators=validators)
     # subform = FormField(MySubform)
-    tabular = FieldList(FormField(MyFormField), min_entries=3, widget=TableWidget())
+    field_list = FieldList(FormField(MyFormField), min_entries=3, widget=GridWidget())
+    form_field = FormField(MyFormField, widget=TableWidget())
+
+
+css = "bootstrap"
 
 
 @app.get("/")
 def index():
     form = KitchenSink()
-    return render_template("index.html", form=form)
+    return render_template("index.html", form=form, css=css)
 
 
 @app.post("/")
@@ -99,4 +104,4 @@ def index_post():
     form = KitchenSink(request.form)
     valid = form.validate()
 
-    return render_template("index.html", form=form)
+    return render_template("index.html", form=form, css=css)
